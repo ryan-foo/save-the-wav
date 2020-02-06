@@ -36,7 +36,6 @@ import sys
 
 import tensorflow as tf
 
-
 FLAGS = None
 
 
@@ -46,7 +45,6 @@ def load_graph(filename):
     graph_def = tf.compat.v1.GraphDef()
     graph_def.ParseFromString(f.read())
     tf.import_graph_def(graph_def, name='')
-
 
 def load_labels(filename):
   """Read in labels, one label per line."""
@@ -71,8 +69,8 @@ def run_graph(wav_data, labels, input_layer_name, output_layer_name,
     # Sort to show labels in order of confidence
     top_k = predictions.argsort()[-num_top_predictions:][::-1]
     for node_id in top_k:
-      human_string = labels[node_id]
       score = predictions[node_id]
+      human_string = labels[node_id]
       return(human_string, score, robot_arm_labels[human_string])
       # print('Predicted word: %s' % (human_string))
       # print('Encoding: %s' % (robot_arm_labels[human_string]))

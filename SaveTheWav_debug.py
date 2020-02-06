@@ -32,6 +32,15 @@ AccurateConv = "ConvNet.pb"
 AccurateConvLabels = "conv_labels.txt"
 
 '''
+Write to txt file for debugging
+'''
+
+debug = True
+f = open("debug_log.txt","a+")
+f.write('\nNew Session\n')
+
+
+'''
 Audio Listener. Write to a pyaudio.Stream() <Open Microphone>
 '''
 threshold = 0.5 #threshold for detection
@@ -76,6 +85,7 @@ data = np.zeros(feed_samples, dtype='int16')
 
 # Storing predictions to do post-processing upon
 predictions = []
+prediction_times = []
 
 print('Get audio, begin callback.')
 
@@ -111,6 +121,8 @@ try:
         wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
         wf.setframerate(16000)
         wf.writeframes(b''.join(data))
+        wf.close()
+
 
         # stop_time_write_to_wav = time.time()
 
@@ -132,8 +144,12 @@ try:
             how_many_labels=1)
 
         stop_time_prediction = time.time()
+        prediction_time = round(stop_time_prediction-start_time_prediction,2)
 
-        print("Prediction took {} seconds to run.".format(round(stop_time_prediction-start_time_prediction,2)))
+        print("Prediction took {} seconds to run.".format(prediction_time))
+
+        prediction_times.append(prediction_time)
+        f.write(str(prediction_time) + ', ')
 
         # if (prediction[1] > threshold):
         #     predictions.append(prediction[2]) # Append encoding, push old encoding out if its above 5!
@@ -156,6 +172,8 @@ try:
 
 
 except (KeyboardInterrupt, SystemExit):
+    f.close()
+    wf.close()
     stream.stop_stream()
     stream.close()
     timeout = time.time()

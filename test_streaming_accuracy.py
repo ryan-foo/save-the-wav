@@ -50,8 +50,8 @@ the start of the file that it occurs.
 
 Here's an example of how to run the tool:
 
-bazel run tensorflow/examples/speech_commands:test_streaming_accuracy_py -- \
---wav=/tmp/streaming_test_bg.wav \
+bazel run tensorflow/examples/speech_commands:test_streaming_accuracy.py -- \
+--wav=/tmp/streaming_test.wav \
 --ground-truth=/tmp/streaming_test_labels.txt --verbose \
 --model=/tmp/ConvNet.pb \
 --labels=/tmp/speech_commands_train/conv_labels.txt \
@@ -69,7 +69,7 @@ import sys
 import numpy
 import tensorflow as tf
 
-from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
+from tensorflow import audio
 from tensorflow.examples.speech_commands.accuracy_utils import StreamingAccuracyStats
 from tensorflow.examples.speech_commands.recognize_commands import RecognizeCommands
 from tensorflow.examples.speech_commands.recognize_commands import RecognizeResult
@@ -104,7 +104,7 @@ def read_wav_file(filename):
   with tf.Session(graph=tf.Graph()) as sess:
     wav_filename_placeholder = tf.placeholder(tf.string, [])
     wav_loader = io_ops.read_file(wav_filename_placeholder)
-    wav_decoder = contrib_audio.decode_wav(wav_loader, desired_channels=1)
+    wav_decoder = tf.audio.decode_wav(wav_loader, desired_channels=1)
     res = sess.run(wav_decoder, feed_dict={wav_filename_placeholder: filename})
   return res.sample_rate, res.audio.flatten()
 

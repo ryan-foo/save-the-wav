@@ -5,8 +5,13 @@ Ensure you have already trained the model, and its labels, and placed it in the 
 '''
 
 # Imports
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import argparse
+import sys
 
-# import tensorflow as tf
+import tensorflow as tf
 # import collections
 from queue import Queue
 # from threading import Thread
@@ -20,27 +25,71 @@ import pyaudio
 # from scipy.io import wavfile
 
 '''
-Select Model
+Inference Related Variables and Helpers
+'''
+
+wav='output.wav', 
+labels='conv_labels.txt',
+graph='ConvNet.pb', 
+input_name='wav_data:0', 
+output_name='labels_softmax:0', 
+how_many_labels=1
+
+# Dictionary Mapping for our Labels
+robot_arm_labels = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2, 
+                    'three': 3, 'four': 4, 'on': 5, 'off': 6, 'stop': 7, 'go': 8}
+
+# def load_graph(filename):
+#   """Unpersists graph from file as default graph."""
+#   with tf.io.gfile.GFile(filename, 'rb') as f:
+#     graph_def = tf.compat.v1.GraphDef()
+#     graph_def.ParseFromString(f.read())
+#     tf.import_graph_def(graph_def, name='')
+
+# def load_labels(filename):
+#   """Read in labels, one label per line."""
+#   return [line.rstrip() for line in tf.io.gfile.GFile(filename)]
+
+# def run_graph(wav, input_layer_name, output_layer_name):
+
+#     with open(wav, 'rb') as wav_file:
+#         wav_data = wav_file.read()
+
+#     with tf.compat.v1.Session() as sess:
+#     # Feed the audio data as input to the graph.
+#     #   predictions  will contain a two-dimensional array, where one
+#     #   dimension represents the input image count, and the other has
+#     #   predictions per class
+#         softmax_tensor = sess.graph.get_tensor_by_name(output_layer_name)
+#         predictions, = sess.run(softmax_tensor, {input_layer_name: wav_data})
+
+#         # Sort labels in terms of confidence
+#         top_k = predictions.argsort()[-how_many_labels:][::-1]
+#         for node_id in top_k:
+#             score = predictions[node_id]
+#             human_string = labels[node_id]
+#             return(human_string, score, robot_arm_labels[human_string])
+
+
+'''
+Audio Listener. Write to a pyaudio.Stream() <Open Microphone>
 '''
 
 run = True
 verbose = True
 
-LowLatency = "LowLatencySVDF.pb"
-LowLatencyLabels = "low_latency_svdf_labels.txt"
-AccurateConv = "ConvNet.pb"
-AccurateConvLabels = "conv_labels.txt"
-
-'''
-Audio Listener. Write to a pyaudio.Stream() <Open Microphone>
-'''
 threshold = 0.5 #threshold for detection
+chunk = 16000 # Chunks of 16000 samples # How muc audio sample per frame are we going to display?
+sample_format = pyaudio.paInt16
+fs = 16000 # mic sampling rate
+feed_duration = 1
+channels = 1
 filename = 'output.wav' 
 p = pyaudio.PyAudio() # Interface to Port Audio
 
 # Run Demo for timeout number of seconds
 timeout = time.time() + 0.5 * 300 # 150 seconds from now
-feed_samples = 16000
+feed_samples = int(fs * feed_duration)
 
 # Initialize Queue
 q = Queue()
@@ -62,12 +111,12 @@ def callback(in_data, frame_count, time_info, status):
 
 def get_audio_input_stream(callback):
     stream = p.open(
-        format=pyaudio.paInt16,
-        channels=1,
-        rate=16000,
+        format=sample_format,
+        channels=channels,
+        rate=fs,
         input=True,
         output=True,
-        frames_per_buffer=16000,
+        frames_per_buffer=chunk,
         stream_callback=callback)
     return stream
 
@@ -104,17 +153,17 @@ try:
         print("Queue size:", q.qsize())
 
         # Convert np int16 to .wav format
-        # start_time_write_to_wav = time.time()
+        start_time_write_to_wav = time.time()
 
         wf = wave.open(filename, 'wb')
-        wf.setnchannels(1)
-        wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
-        wf.setframerate(16000)
+        wf.setnchannels(channels)
+        wf.setsampwidth(p.get_sample_size(sample_format))
+        wf.setframerate(fs)
         wf.writeframes(b''.join(data))
 
-        # stop_time_write_to_wav = time.time()
+        stop_time_write_to_wav = time.time()
 
-        # print("Writing to a .wav took ", round(stop_time_write_to_wav - start_time_write_to_wav, 2), " seconds to run.")
+        print("Writing to a .wav took ", round(stop_time_write_to_wav - start_time_write_to_wav, 2), " seconds to run.")
         # wf.close()
 
         # Label.wav takes .wav, labels, graph, input_name, output_name and how many labels you want, running inference to print the predictions.
@@ -124,16 +173,9 @@ try:
         # The way the function is being called, allocation of the function pointer
             # Management of the pointer, not efficient -- memory
 
-        prediction = label_wav.label_wav(wav='output.wav', 
-            labels=AccurateConvLabels, # or AccurateConvLabels
-            graph=AccurateConv,  # or AccurateConv
-            input_name='wav_data:0', 
-            output_name='labels_softmax:0',
-            how_many_labels=1)
-
         stop_time_prediction = time.time()
 
-        print("Prediction took {} seconds to run.".format(round(stop_time_prediction-start_time_prediction,2)))
+        print("Prediction took ", round(stop_time_prediction - start_time_prediction, 2), " seconds to run.")
 
         # if (prediction[1] > threshold):
         #     predictions.append(prediction[2]) # Append encoding, push old encoding out if its above 5!

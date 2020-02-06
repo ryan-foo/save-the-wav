@@ -1,5 +1,5 @@
 python3 test_streaming_accuracy.py -- \
---wav=/tmp/streaming_test_bg.wav \
+--wav=/tmp/streaming_test.wav \
 --ground-truth=/tmp/streaming_test_labels.txt --verbose \
 --model=/tmp/ConvNet.pb \
 --labels=/tmp/speech_commands_train/conv_labels.txt \
