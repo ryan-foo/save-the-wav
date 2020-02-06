@@ -12,8 +12,9 @@ from queue import Queue
 # from threading import Thread
 import label_wav
 import numpy as np
+from datetime import datetime
 import time
-# import os
+import os
 import wave
 
 import pyaudio
@@ -36,9 +37,13 @@ Write to txt file for debugging
 '''
 
 debug = True
-f = open("debug_log.txt","a+")
-f.write('\nNew Session\n')
 
+if(debug):
+    f = open("debug_log.txt","a+")
+    now = datetime.now()
+    current_time = str(now.strftime("%H:%M:%S"))
+    header = ('\nNew Session ' + current_time + '\n')
+    f.write(header)
 
 '''
 Audio Listener. Write to a pyaudio.Stream() <Open Microphone>
@@ -63,7 +68,7 @@ def callback(in_data, frame_count, time_info, status):
     data0 = np.frombuffer(in_data, dtype='int16')
     data = np.append(data,data0)
     if len(data) > feed_samples:
-        data = data[-feed_samples:]
+        data = data[-feed_samples:] # Take the last second of data, the most recent second
         # Process data async by sending a queue.
         q.put(data)
 
@@ -105,6 +110,19 @@ stream.start_stream()
 
 # Continual Live Inference
 
+# Initialize loading labels, graphs
+
+# label_wav_initial = label_wav.label_wav(wav='output.wav', 
+#     labels=AccurateConvLabels, # or AccurateConvLabels
+#     graph=AccurateConv,  # or AccurateConv
+#     input_name='wav_data:0', 
+#     output_name='labels_softmax:0',
+#     how_many_labels=1)
+
+label_wav.load_graph(AccurateConv)
+
+labels_list = label_wav.load_labels(AccurateConvLabels)
+
 try:
     while run:
         # Dequeue data
@@ -116,13 +134,13 @@ try:
         # Convert np int16 to .wav format
         # start_time_write_to_wav = time.time()
 
+        # Saves the .wav
         wf = wave.open(filename, 'wb')
         wf.setnchannels(1)
         wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
         wf.setframerate(16000)
         wf.writeframes(b''.join(data))
         wf.close()
-
 
         # stop_time_write_to_wav = time.time()
 
@@ -134,14 +152,16 @@ try:
         start_time_prediction = time.time()
 
         # The way the function is being called, allocation of the function pointer
-            # Management of the pointer, not efficient -- memory
+        # Management of the pointer, not efficient -- memory
 
-        prediction = label_wav.label_wav(wav='output.wav', 
-            labels=AccurateConvLabels, # or AccurateConvLabels
-            graph=AccurateConv,  # or AccurateConv
-            input_name='wav_data:0', 
-            output_name='labels_softmax:0',
-            how_many_labels=1)
+        with open(filename, 'rb') as wav_file:
+            wav_data = wav_file.read()
+
+        prediction = label_wav.run_graph(wav_data=wav_data, 
+            labels=labels_list, # or AccurateConvLabels
+            input_layer_name='wav_data:0', 
+            output_layer_name='labels_softmax:0',
+            num_top_predictions=1)
 
         stop_time_prediction = time.time()
         prediction_time = round(stop_time_prediction-start_time_prediction,2)
@@ -166,6 +186,19 @@ try:
 
             print('Detected the word ' + str(prediction[0]) + ' with {} confidence.'.format(prediction[1])
                 )
+
+        # Clean up
+        # if (os.path.isfile('output.wav')):
+        #     print('I got some output')
+        # else:
+        #     print('I got no output')
+
+        os.remove("output.wav")
+
+        # if (os.path.isfile('output.wav')):
+        #     print('I got some output')
+        # else:
+        #     print('I got no output')
 
         stop_time_main_loop = time.time()
         print ("One main loop takes ", round(stop_time_main_loop - start_time_main_loop, 2), " seconds to run")

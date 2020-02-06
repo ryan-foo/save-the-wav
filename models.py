@@ -348,6 +348,8 @@ def create_low_latency_conv_model(fingerprint_input, model_settings,
           v
         [Relu]
           v
+        [Dropout]
+          v
       [MatMul]<-(weights)
           v
       [BiasAdd]<-(bias)

@@ -98,7 +98,7 @@ def label_wav(wav, labels, graph, input_name, output_name, how_many_labels):
   with open(wav, 'rb') as wav_file:
     wav_data = wav_file.read()
 
-  return(run_graph(wav_data, labels_list, input_name, output_name, how_many_labels))
+  return(wav_data, labels_list, input_name, output_name, how_many_labels)
 
 
 def main(_):
