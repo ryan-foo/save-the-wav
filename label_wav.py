@@ -63,8 +63,11 @@ def run_graph(wav_data, labels, input_layer_name, output_layer_name,
     predictions, = sess.run(softmax_tensor, {input_layer_name: wav_data})
 
     # Dictionary Mapping for our labels
+    # robot_arm_labels = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2,
+                        # 'three': 3, 'stop': 4, 'go': 5}
     robot_arm_labels = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2, 
                         'three': 3, 'four': 4, 'on': 5, 'off': 6, 'stop': 7, 'go': 8}
+
 
     # Sort to show labels in order of confidence
     top_k = predictions.argsort()[-num_top_predictions:][::-1]

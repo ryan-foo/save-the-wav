@@ -26,10 +26,12 @@ Select Model
 run = True
 verbose = True
 
-LowLatency = "LowLatencySVDF.pb"
-LowLatencyLabels = "low_latency_svdf_labels.txt"
-AccurateConv = "ConvNet.pb"
-AccurateConvLabels = "conv_labels.txt"
+LowLatencySVDF = "models/low_latency_SVDF_100000_onetwothreestopgo.pb"
+LowLatencySVDFLabels = "models/low_latency_svdf_labels.txt"
+AccurateConv = "models/ConvNet.pb"
+AccurateConvLabels = "models/conv_labels.txt"
+LowLatencyConv = "models/low_latency_conv_41000_onetwothreestopgo.pb"
+LowLatencyConvLabels = "models/low_latency_conv_labels.txt"
 
 '''
 Audio Listener. Write to a pyaudio.Stream() <Open Microphone>
@@ -125,8 +127,8 @@ try:
             # Management of the pointer, not efficient -- memory
 
         prediction = label_wav.label_wav(wav='output.wav', 
-            labels=AccurateConvLabels, # or AccurateConvLabels
-            graph=AccurateConv,  # or AccurateConv
+            labels= LowLatencySVDFLabels, #LowLatencySVDF, LowLatencyConv, or AccurateConv
+            graph= LowLatencySVDF,  # LowLatencySVDF, LowLatencyConv or AccurateConv
             input_name='wav_data:0', 
             output_name='labels_softmax:0',
             how_many_labels=1)

@@ -8,12 +8,70 @@ The aim of the tool was to provide pre-processing for raw audio input from a mic
 
 Post-Processing of information happens in `label_wav.py`. We take the prediction with the highest predicted probability, and return the prediction, score (predicted probability), and dictionary encoding of the highest predicted word in a tuple.
 
-Key actors here are `label_wav.py` and `SaveTheWav_debug.py`. Running `SaveTheWav_debug.py` starts inference, taking `ConvNet.pb` as a graph input and `conv_labels.txt` as desired labels for said input. 
+Key actors here are `label_wav.py` and `SaveTheWav.py`. Running `SaveTheWav.py` starts inference, taking `ConvNet.pb` as a graph input and `conv_labels.txt` as desired labels for the output.
 
-The problem begins when the program has been running for more than 30 time steps, as the prediction time increaes linearly (from 0.12 seconds to 2.2 seconds.) By the time we have hit 150 seconds of runtime, the queue size (buffer) has filled up to 37 in queue. This is not great.
+Requirements are TensorFlow, Numpy, PyAudio. (just install the latest versions, as at 06/02/20. Particularly important is TF 2.0 because the backward compatibility is not great? I will fix this bc I just realised the RPi uses 1.15.)
 
-Requirements are TensorFlow, Numpy, PyAudio. (just install the latest versions, as at 06/02. Particularly important is TF 2.0.)
+### SaveTheWav Model Zoo
 
+```
+python3 SaveTheWav.py
+```
+<Models and Architectures from the speech recognition example. You can find more credits there. I do not claim credit for these architectures.>
+
+Mac OSX: Run on Mac OSX MacBook Air 2013.
+RPi: Raspberry Pi 3.
+
+Two separate types of model being trained at the moment.
+
+```
+10 classes
+'_silence_ _unknown_ one two three four on off stop go'
+
+7 classes
+'_silence_ _unknown_ one two three stop go'
+```
+
+Desired words -- words that have been trained for and are meant to output commands.
+
+Detection ratio: Desired words detected divided by desired words spoken.
+False alarm: Desired words detected when there is not a desired word being spoken.
+
+Hypothesis:
+Less classes means less false alarms, higher detection ratio.
+More parameters means better inferences (less false alarm rate, higher detection ratio.)
+
+#### ConvNet (10 Classes) (ConvNet_10Classes_070220.pb)
+
+Your standard Convolutional Neural Network model.
+
+Runtime (Mac OSX): 0.1-0.2 seconds avg.
+
+#### Low Latency Conv (7 Classes) (LowLatencyConv_7Classes_110220.pb)
+
+Should run faster than ConvNet.
+
+Runtime (Mac OSX): 0.1-0.2 seconds.
+
+#### Low Latency SVDF (10 Classes) (LowLatencySVDF_10Classes_110220.pb)
+
+Should run faster than Low Latency Conv.
+
+Runtime (Mac OSX): 0.1-0.2 seconds.
+
+Observation:
+Runtime difference is negligible. Have to investigate further on the constrained computer (Raspberry Pi).
+
+### Running Debug
+
+When running `debugSaveTheWav.py`, it will write to `debug_log.txt` re: the time its been working 
+
+### To Do
+
+Get `streaming_test.py` working.
+Argument Parser for `SaveTheWav.py` (including debug and verbose options)
+Conversion script for Tensorflow Lite.
+Changing of Sample Rates (16k microphone works for certain microphones, others take 44100 or others?)
 
 ### Reference
 
