@@ -19,7 +19,7 @@ python3 SaveTheWav.py
 ```
 <Models and Architectures from the speech recognition example. You can find more credits there. I do not claim credit for these architectures.>
 
-Mac OSX: Run on Mac OSX MacBook Air 2013.
+Mac OSX: Run on Mac OSX MacBook Air 2015.
 RPi: Raspberry Pi 3.
 
 Two separate types of model being trained at the moment.

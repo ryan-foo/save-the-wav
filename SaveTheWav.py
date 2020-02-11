@@ -12,12 +12,21 @@ import pyaudio
 run = True
 verbose = False
 
-LowLatencySVDF = "models/low_latency_SVDF_100000_onetwothreefouronoffstopgo.pb"
+LowLatencySVDF = "models/LowLatencySVDF_10Classes_110720.pb"
 LowLatencySVDFLabels = "models/low_latency_svdf_labels.txt"
-AccurateConv = "models/ConvNet.pb"
+AccurateConv = "models/ConvNet_10Classes_070220.pb"
 AccurateConvLabels = "models/conv_labels.txt"
-LowLatencyConv = "models/low_latency_conv_41000_onetwothreestopgo.pb"
+LowLatencyConv = "models/LowLatencyConv_7Classes_110220.pb"
 LowLatencyConvLabels = "models/low_latency_conv_labels.txt"
+
+debug = False
+
+if(debug):
+    f = open("debug_log.txt","a+")
+    now = datetime.now()
+    current_time = str(now.strftime("%H:%M:%S"))
+    header = ('\nNew Session ' + current_time + '\n')
+    f.write(header)
 
 '''
 Audio Listener. Write to a pyaudio.Stream() <Open Microphone>
@@ -140,6 +149,10 @@ try:
         #     predictions.push()
         # else:
         #     predictions.append(0)
+
+        if(debug):
+            prediction_times.append(prediction_time)
+            f.write(str(prediction_time) + ', ')
 
         if (verbose == True):
             print(prediction) # (predicted word, score <predicted probability>, encoding in a tuple)
