@@ -64,7 +64,22 @@ Runtime difference is negligible. Have to investigate further on the constrained
 
 ### Running Debug
 
-When running `debugSaveTheWav.py`, it will write to `debug_log.txt` re: the time its been working 
+When running `debugSaveTheWav.py`, it will write to `debug_log.txt` re: the time taken to run the inference.
+
+### Converting to TFLite
+
+Finding `input_array` and `output_array` is non trivial. Use `convert.py` while training to find the desired arrays. The current `input_name` is `wav_data`, `output_name` is `labels_softmax`, and you will need to specify the shape of `wav_data`. There are unsupported TensorFlow ops we attempt to convert.
+
+`converter = tf.lite.TFLiteConverter.from_frozen_graph(
+    localpb, 
+    ["wav_data"], 
+    ['labels_softmax'],
+    {"wav_data":[1,160,160,3]}
+)`
+
+ Bypass and create a hybrid model with `converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS]`.
+
+[Afterwards, use this notebook to convert your .pb file to a .tflite file.](https://colab.research.google.com/drive/1fB8HjfGWqtkqcsPliMVYqfmxvFRShm29)
 
 ### To Do
 
