@@ -3,7 +3,7 @@ import label_wav
 import tensorflow as tf
 
 positive_words = ['one', 'two', 'three', 'four', 'on', 'off', 'stop', 'go']
-negative_words = ['cat', 'follow', 'learn', 'up', 'forward', 'left', 'dog', 'marvin', 'right',
+negative_words = ['follow', 'learn', 'up', 'forward', 'left', 'dog', 'marvin', 'right',
  'visual', 'backward', 'down', 'nine', 'seven', 'wow', 'bed', 'eight', 'happy', 'no', 'sheila', 'tree',
   'yes', 'bird', 'five', 'house', 'six', 'zero']
 words = positive_words + negative_words
@@ -13,7 +13,8 @@ robot_arm_labels = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2,
 
 LowLatencySVDF = "models/LowLatencySVDF_10Classes_110720.pb"
 LowLatencySVDFLabels = "models/low_latency_svdf_labels.txt"
-AccurateConv = "models/ConvNet_10Classes_070220.pb"
+AccurateConv_Old = "models/ConvNet_10Classes_070220.pb"
+AccurateConv = "models/ConvNet_190220.pb"
 AccurateConvLabels = "models/conv_labels.txt"
 LowLatencyConv = "models/LowLatencyConv_7Classes_110220.pb"
 LowLatencyConvLabels = "models/low_latency_conv_labels.txt"
@@ -79,7 +80,7 @@ def confusion_matrix_helper_v1(test_dictionary):
 	y_true = []
 	y_pred = []
 
-	for word in positive_words:
+	for word in words:
 		print('Now testing against %d instances of word: %s' % (len((test_dictionary[word])), word))
 		for i in range(0, len((test_dictionary[word]))): #len((test_dictionary[word]))
 			(ground_truth, predicted_label, score) = single_step_label_wav_v1(word, test_dictionary[word][i])
@@ -100,8 +101,6 @@ confusion_matrix = tf.math.confusion_matrix(labels=y_true,
 
 print('Confusion matrix for %d words per word: 9 classes' % TRIALSPERWORD)
 print(confusion_matrix)
-
-
 
 print("Accuracy Metrics")
 
@@ -130,3 +129,21 @@ recall = TP / (TP + FN)
 
 print("Precision Score: " + str(precision))
 print("Recall: " + str(recall))
+
+print("Logging...")
+
+debug = True
+
+if(debug):
+    f = open("log_ConvNet.txt","a+")
+    now = datetime.now()
+    current_time = str(now.strftime("%H:%M:%S"))
+    header = ('\nNew Session ' + current_time + '\n')
+    f.write(header)
+    f.write("Precision: %s, Recall: %s" % (precision, recall) + '\n')
+    f.write('Confusion matrix for %d words per word: 9 classes' % TRIALSPERWORD)
+    f.write("Confusion Matrix: " + str(confusion_matrix) + '\n')
+
+
+
+print("Logging complete!")
