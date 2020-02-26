@@ -68,6 +68,16 @@ def run_graph(wav_data, labels, input_layer_name, output_layer_name,
     robot_arm_labels = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2, 
                         'three': 3, 'four': 4, 'on': 5, 'off': 6, 'stop': 7, 'go': 8}
 
+    robot_arm_labels_37_classes = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2, 
+          'three': 3, 'four': 4, 'on': 5, 'off': 6, 'stop': 7, 'go': 8, 
+          'backward': 9, 'bed': 10, 'bird': 11, 'cat': 12, 'dog': 13,
+          'down': 14, 'eight': 15, 'five': 16, 'forward': 17, 'house': 18,
+          'learn': 19, 'left': 20, 'marvin': 21, 'nine': 22, 'no': 23,
+          'right': 24, 'seven': 25, 'sheila': 26, 'six': 27, 'tree': 28,
+          'up': 29, 'visual': 30, 'wow': 31, 'yes': 32, 'zero': 33,
+          'happy': 34, 'follow': 35}
+
+
 
     # Sort to show labels in order of confidence
     top_k = predictions.argsort()[-num_top_predictions:][::-1]
