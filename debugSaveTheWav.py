@@ -25,14 +25,16 @@ Select Model
 '''
 
 run = True
-verbose = True
+verbose = False
 
-LowLatencySVDF = "models/low_latency_SVDF_100000_onetwothreestopgo.pb"
+LowLatencySVDF = "models/LowLatencySVDF_10Classes_110720.pb"
 LowLatencySVDFLabels = "models/low_latency_svdf_labels.txt"
-AccurateConv = "models/ConvNet.pb"
+AccurateConv = "models/ConvNet_190220.pb"
 AccurateConvLabels = "models/conv_labels.txt"
-LowLatencyConv = "models/low_latency_conv_41000_onetwothreestopgo.pb"
+LowLatencyConv = "models/LowLatencyConv_7Classes_110220.pb"
 LowLatencyConvLabels = "models/low_latency_conv_labels.txt"
+AccurateConv37Classes = "models/ConvNet_220220_37Classes.pb"
+AccurateConv37ClassesLabels = "models/conv_labels_37_classes.txt"
 
 '''
 Write to txt file for debugging
@@ -41,7 +43,7 @@ Write to txt file for debugging
 debug = True
 
 if(debug):
-    f = open("debug_log.txt","a+")
+    f = open("logs/debug_log.txt","a+")
     now = datetime.now()
     current_time = str(now.strftime("%H:%M:%S"))
     header = ('\nNew Session ' + current_time + '\n')
@@ -121,8 +123,8 @@ stream.start_stream()
 #     output_name='labels_softmax:0',
 #     how_many_labels=1)
 
-label_wav.load_graph(LowLatencySVDF)
-labels_list = label_wav.load_labels(LowLatencySVDFLabels)
+label_wav.load_graph(AccurateConv37Classes)
+labels_list = label_wav.load_labels(AccurateConv37ClassesLabels)
 
 try:
     while run:
@@ -164,6 +166,8 @@ try:
             output_layer_name='labels_softmax:0',
             num_top_predictions=1)
 
+        predicted_word, score, encoding = prediction # Destructuring
+
         stop_time_prediction = time.time()
         prediction_time = round(stop_time_prediction-start_time_prediction,2)
 
@@ -178,14 +182,20 @@ try:
         # else:
         #     predictions.append(0)
 
-        # if (verbose == True):
-        #     print(prediction) # (predicted word, score <predicted probability>, encoding in a tuple)
-        #     print(predictions) # Current list of predictions thus far
+        if (verbose == True):
+            print(prediction) # (predicted word, score <predicted probability>, encoding in a tuple)
+            print(predictions) # Current list of predictions thus far
+
+        # Discard prediction encoding
+
+
+        if encoding > 8: 
+            encoding = 0
 
         # Detects if threshold is passed, and if the prediction is not 'silence' or 'unknown'
-        if (prediction[1] > threshold and prediction[2] != 0):
+        if (score > threshold and encoding != 0):
 
-            print('Detected the word ' + str(prediction[0]) + ' with {} confidence.'.format(prediction[1])
+            print('Detected the word ' + str(predicted_word) + ' with {} confidence.'.format(score)
                 )
 
         # Clean up

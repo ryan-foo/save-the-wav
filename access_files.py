@@ -2,13 +2,35 @@ import os
 import label_wav
 import tensorflow as tf
 import datetime
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import seaborn as sn
+import argparse
 
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+'''
+The job of this script is to test the model against all of the files that have been partitioned out for test.
+
+We read the test files into a list. We split the list into a dictionary
+{one: [PATH_TO_ONE_first.wav, PATH_TO_ONE_second.wav],
+two: [PATH_TO_TWO.wav], and so on so that our label wav function can pick it up
+
+Confusion Matrix Helper takes the test dictionary (and probably will take samples as an argparse),
+return the total number its tested on
+
+We use seaborn for our confusion matrix.
+
+We calculate precision/recall scores and store them in the file, log
+...}
+'''
+
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, plot_confusion_matrix
 
 positive_words = ['one', 'two', 'three', 'four', 'on', 'off', 'stop', 'go']
-negative_words = ['follow', 'learn', 'up', 'forward', 'left', 'dog', 'marvin', 'right',
- 'visual', 'backward', 'down', 'nine', 'seven', 'wow', 'bed', 'eight', 'happy', 'no', 'sheila', 'tree',
-  'yes', 'bird', 'five', 'house', 'six', 'zero', 'cat']
+negative_words = ['backward', 'bed', 'bird', 'cat', 'dog', 'down', 'eight',
+				'five', 'forward', 'house', 'learn', 'left', 'marvin', 'nine',
+				'no', 'right', 'seven', 'sheila', 'six', 'tree', 'up', 'visual',
+				'wow', 'yes', 'zero', 'happy', 'follow']
 words = positive_words + negative_words
 
 robot_arm_labels = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 2, 
@@ -23,6 +45,16 @@ robot_arm_labels_37_classes = {'_silence_': 0, '_unknown_': 0, 'one': 1, 'two': 
 					'up': 29, 'visual': 30, 'wow': 31, 'yes': 32, 'zero': 33,
 					'happy': 34, 'follow': 35}
 
+robot_arm_labels_35_classes = {'_unknown_': 0, 'one': 1, 'two': 2, 
+					'three': 3, 'four': 4, 'on': 5, 'off': 6, 'stop': 7, 'go': 8, 
+					'backward': 9, 'bed': 10, 'bird': 11, 'cat': 12, 'dog': 13,
+					'down': 14, 'eight': 15, 'five': 16, 'forward': 17, 'house': 18,
+					'learn': 19, 'left': 20, 'marvin': 21, 'nine': 22, 'no': 23,
+					'right': 24, 'seven': 25, 'sheila': 26, 'six': 27, 'tree': 28,
+					'up': 29, 'visual': 30, 'wow': 31, 'yes': 32, 'zero': 33,
+					'happy': 34, 'follow': 35}
+
+reverse_labels_37_classes = dict(map(reversed, robot_arm_labels_37_classes.items()))
 
 LowLatencySVDF = "models/LowLatencySVDF_10Classes_110720.pb"
 LowLatencySVDFLabels = "models/low_latency_svdf_labels.txt"
@@ -35,9 +67,9 @@ AccurateConv37ClassesLabels = "models/conv_labels_37_classes.txt"
 
 record = True
 
-ROBOTARMLABEL = robot_arm_labels
-MODEL = AccurateConv
-MODELLABELS = AccurateConvLabels
+ROBOTARMLABEL = robot_arm_labels_37_classes
+MODEL = AccurateConv37Classes
+MODELLABELS = AccurateConv37ClassesLabels
 
 # Choice of Model
 label_wav.load_graph(MODEL)
@@ -51,7 +83,7 @@ def read_test_files_into_list():
 	for line in test_list_temp:
 		test_list.append(str(line, "utf-8"))
 	return(test_list)
-# returns: [four/speech.wav, one/speech2.wav]
+# returns: [four/speech.wav, one/speech2.wav, ...]
 
 def split_test_list_into_word_dictionary(test_list):
 	test_dictionary = {}
@@ -84,8 +116,8 @@ def single_step_label_wav_v1(word, filename):
 									num_top_predictions=1)
 	
 	# Relabelling
-	if word not in positive_words:
-		word = '_unknown_'
+	# if word not in positive_words:
+	# 	word = '_unknown_'
 
 	ground_truth = ROBOTARMLABEL[word]
 	predicted_label = prediction[2]
@@ -98,35 +130,14 @@ def confusion_matrix_helper_v1(test_dictionary, total_words):
 	y_pred = []
 
 	for word in words:
-		samples = len(test_dictionary[word])
+		samples = len((test_dictionary)[word]) #Change samples accordingly...
 		total_words += samples
-		print('Now testing against %d instances of word: %s' % (samples, word))
 		for i in range(0, samples):
 			(ground_truth, predicted_label, score) = single_step_label_wav_v1(word, test_dictionary[word][i])
 			y_true.append(ground_truth)
 			y_pred.append(predicted_label)
+		print('Tested %d instances of word: %s' % (samples, word))
 	return(y_true, y_pred, total_words)
-
-'''
-Execution
-'''
-
-test_dictionary = split_test_list_into_word_dictionary(read_test_files_into_list())
-y_true, y_pred, total_words = confusion_matrix_helper_v1(test_dictionary, 0)
-
-conf_matrix = tf.math.confusion_matrix(labels=y_true, predictions=y_pred)
-
-print('Confusion matrix for %d classes' % len(words))
-
-# with tf.compat.v1.Session():
-#    print('Confusion Matrix: \n\n', tf.Tensor.eval(conf_matrix,feed_dict=None, session=None))
-# print(confusion_matrix)
-
-print(confusion_matrix(y_true,y_pred))
-print(classification_report(y_true,y_pred))
-print(accuracy_score(y_true, y_pred))
-
-print("\nAccuracy Metrics")
 
 def perf_measure(y_true, y_pred):
     TP = 0
@@ -146,30 +157,76 @@ def perf_measure(y_true, y_pred):
 
     return(TP, FP, TN, FN)
 
+'''
+Execution
+'''
+
+class_names = ['_unknown_'] + words
+
+test_dictionary = split_test_list_into_word_dictionary(read_test_files_into_list())
+
+print('Beginning the testing.')
+y_true, y_pred, total_words = confusion_matrix_helper_v1(test_dictionary, 0)
+
+sea_born = True
+sci_kit = not sea_born
+
+# for i in range(0, len(y_true)):
+# 	y_true[i] = reverse_labels_37_classes[y_true[i]]
+# 	y_pred[i] = reverse_labels_37_classes[y_pred[i]]
+# 	print(y_true[i])
+
+if sea_born:
+	conf_matrix = confusion_matrix(y_true, y_pred)
+	if len(conf_matrix) == 35:
+		dimensions = words
+	else:
+		dimensions = class_names
+	df_cm = pd.DataFrame(conf_matrix, dimensions, dimensions)
+	sn.set(font_scale=0.3)
+	ax = plt.subplot()
+	sn.heatmap(df_cm, annot=True, annot_kws={"size": 6}, ax = ax)
+	ax.set_xlabel('Predicted labels');
+	ax.set_ylabel('True labels'); 
+	ax.set_title('Confusion Matrix');
+	ax.xaxis.set_ticklabels(dimensions); ax.yaxis.set_ticklabels(dimensions);
+
+	plt.show()
+
+if sci_kit:
+	conf_matrix = confusion_matrix(y_true, y_pred)
+	plt.matshow(conf_matrix, cmap='binary')
+	plt.show()
+
+print(classification_report(y_true,y_pred))
+
+print("\nAccuracy Metrics")
+
 TP, FP, TN, FN = perf_measure(y_true, y_pred)
 
 precision = TP / (TP + FP)
 recall = TP / (TP + FN)
 
+print('Accuracy score: ' + str(accuracy_score(y_true, y_pred)))
 print("Precision Score: " + str(precision))
 print("Recall: " + str(recall))
 
 print("Logging...")
 
-debug = True
-
-
 if record:
-	f = open("log_ConvNet.txt","a+")
+	# f = open("logs/log_ConvNet.txt","a+")
 	now = datetime.datetime.now()
-	current_time = str(now.strftime("%d/%m, %H:%M:%S"))
-	header = ('\nNew Session ' + current_time + f" with {MODEL} model" + '\n')
+	# current_time = str(now.strftime("%d%m, %H:%M:%S"))
+	
+	# header = ('\nNew Session ' + current_time + f" with {MODEL} model" + '\n')
 
-	f.write(header)
-	f.write("Tested on %d data samples" % total_words + "\n")
-	f.write("Precision: %s, Recall: %s" % (precision, recall) + "\n")
-	f.write('Confusion matrix for %d classes' % len(positive_words) + "\n")
-	f.write("Confusion Matrix: \n" + str(confusion_matrix(y_true, y_pred)) + "\n")
-	f.close()
+	# f.write(header)
+	# f.write("Tested on %d data samples" % total_words + "\n")
+	# f.write("Precision: %s, Recall: %s" % (precision, recall) + "\n")
+	# f.close()
 
+	# CSV for Confusion Matrix
+	day_month_hour_minute = str(now.strftime("%d%m-%H:%M"))
+	csv = df_cm.to_csv(f'logs/Conv{len(conf_matrix)}Classes_Confusion_Matrix_{day_month_hour_minute}.csv', sep=',', index=dimensions, columns=dimensions)
+	
 print("Logging complete!")

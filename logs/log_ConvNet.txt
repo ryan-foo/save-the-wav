@@ -1,0 +1,163 @@
+
+New Session 14:11:19
+Precision: 1.0, Recall: 1.0
+
+New Session 14:33:35
+Tested on 418 data samples
+Precision: 0.6195286195286195, Recall: 0.8070175438596491
+Confusion matrix for 34 classes
+Confusion Matrix: Tensor("confusion_matrix/SparseTensorDenseAdd:0", shape=(9, 9), dtype=int32)
+
+New Session 20:15:32 with AccurateConv model
+Tested on 10811 data samples
+Precision: 0.6195286195286195, Recall: 0.8070175438596491
+Confusion matrix for 34 classes
+Confusion Matrix: [[5136  217  210  415  226  225  149  396  598]
+ [  14  368    2    0    0   11    2    2    0]
+ [  10    0  391    2    3    0    0    1   17]
+ [   8    0   11  384    0    0    0    1    1]
+ [   9    1    3    2  363    6    4    6    6]
+ [  11    6    1    2    1  349   19    2    5]
+ [  10    0    1    0    3   12  360    9    7]
+ [   3    1    0    0    0    2    3  399    3]
+ [  23    1    6    1    3    1    1    3  363]]
+
+New Session 10:35:42 with AccurateConv model
+Tested on 10811 data samples
+Precision: 0.6195286195286195, Recall: 0.8070175438596491
+Confusion matrix for 34 classes
+Confusion Matrix: [[5136  217  210  415  226  225  149  396  598]
+ [  14  368    2    0    0   11    2    2    0]
+ [  10    0  391    2    3    0    0    1   17]
+ [   8    0   11  384    0    0    0    1    1]
+ [   9    1    3    2  363    6    4    6    6]
+ [  11    6    1    2    1  349   19    2    5]
+ [  10    0    1    0    3   12  360    9    7]
+ [   3    1    0    0    0    2    3  399    3]
+ [  23    1    6    1    3    1    1    3  363]]
+
+New Session 25:12:30:52 with models/ConvNet_220220_37Classes.pb model
+Tested on 11005 data samples
+Precision: 0.927170868347339, Recall: 0.9735294117647059
+Confusion matrix for 35 classes
+Confusion Matrix: [[ 26  20  60 ... 401 205 115]
+ [  1 331   0 ...   0   1   1]
+ [  0   0 381 ...   2   1   2]
+ ...
+ [  0   0   0 ...   0   0   0]
+ [  0   0   0 ...   0   0   0]
+ [  0   0   0 ...   0   0   0]]
+
+New Session 25/02, 14:23:35 with models/ConvNet_220220_37Classes.pb model
+Tested on 11005 data samples
+Precision: 0.927170868347339, Recall: 0.9043715846994536
+Confusion matrix for 37 classes
+Confusion Matrix: [[  0   0   0 ...   0   0   0]
+ [  1 331   0 ...   0   1   1]
+ [  0   0 381 ...   2   1   2]
+ ...
+ [  2   0  15 ... 354   1   0]
+ [  1   0   1 ...   0 178   0]
+ [  0   0   6 ...   0   1 106]]
+
+New Session 25/02, 15:03:58 with models/ConvNet_190220.pb model
+Tested on 11005 data samples
+Precision: 0.6184873949579832, Recall: 0.8070175438596491
+Confusion matrix for 10 classes
+Confusion Matrix: [[5264  218  218  417  231  226  150  439  603]
+ [  14  368    2    0    0   11    2    2    0]
+ [  10    0  391    2    3    0    0    1   17]
+ [   8    0   11  384    0    0    0    1    1]
+ [   9    1    3    2  363    6    4    6    6]
+ [  11    6    1    2    1  349   19    2    5]
+ [  10    0    1    0    3   12  360    9    7]
+ [   3    1    0    0    0    2    3  399    3]
+ [  23    1    6    1    3    1    1    3  363]]
+
+New Session 27/02, 11:04:10 with models/ConvNet_220220_37Classes.pb model
+Tested on 105 data samples
+Precision: 1.0, Recall: 1.0
+Confusion matrix for 36 classes
+Confusion Matrix: 
+          one  two  three  four  on  off  stop  go  backward  bed  bird  cat  ...  right  seven  sheila  six  tree  up  visual  wow  yes  zero  happy  follow
+one         2    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+two         0    2      0     0   0    0     0   1         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+three       0    0      2     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+four        0    1      0     2   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+on          0    0      0     0   2    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+off         0    0      0     0   0    2     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+stop        0    0      0     0   0    0     2   0         0    0     0    0  ...      0      1       0    0     0   0       0    0    0     0      0       0
+go          0    0      0     0   0    0     0   2         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+backward    0    0      0     0   0    0     0   0         3    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+bed         0    0      0     0   0    0     0   0         0    3     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+bird        0    0      0     0   0    0     0   0         0    0     3    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+cat         0    0      0     0   0    0     0   0         0    0     0    2  ...      0      0       0    1     0   0       0    0    0     0      0       0
+dog         0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+down        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+eight       0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+five        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+forward     0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+house       0    0      0     0   0    0     1   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+learn       0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+left        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+marvin      0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    1     0   0       0    0    0     0      0       0
+nine        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+no          0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+right       0    0      0     0   0    0     0   0         0    0     0    0  ...      1      0       0    0     0   0       0    0    0     0      0       0
+seven       0    0      0     0   0    0     0   0         0    0     0    0  ...      0      3       0    0     0   0       0    0    0     0      0       0
+sheila      0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       3    0     0   0       0    0    0     0      0       0
+six         0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    3     0   0       0    0    0     0      0       0
+tree        0    0      1     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     2   0       0    0    0     0      0       0
+up          0    0      0     0   0    0     0   0         0    0     0    0  ...      0      1       0    0     0   2       0    0    0     0      0       0
+visual      0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       3    0    0     0      0       0
+wow         0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    3    0     0      0       0
+yes         0    0      0     0   0    0     0   0         0    0     1    0  ...      0      0       0    0     0   0       0    0    2     0      0       0
+zero        0    1      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       1    0    0     1      0       0
+happy       0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      3       0
+follow      0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       3
+
+[35 rows x 35 columns]
+
+New Session 27/02, 11:11:09 with models/ConvNet_220220_37Classes.pb model
+Tested on 875 data samples
+Precision: 0.8636363636363636, Recall: 1.0
+Confusion matrix for 36 classes
+Confusion Matrix: 
+          one  two  three  four  on  off  stop  go  backward  bed  bird  cat  ...  right  seven  sheila  six  tree  up  visual  wow  yes  zero  happy  follow
+one        19    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      1       0
+two         0   21      0     0   0    0     0   3         0    0     0    1  ...      0      0       0    0     0   0       0    0    0     0      0       0
+three       0    0     23     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      1       0
+four        0    1      0    18   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      1       0
+on          0    0      0     0  21    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      1       0
+off         0    0      0     0   0   18     0   0         0    0     0    1  ...      0      0       1    0     0   4       0    0    0     0      0       0
+stop        0    0      0     0   0    0    21   1         0    0     0    0  ...      0      1       0    0     0   1       0    0    0     0      0       0
+go          0    0      0     0   0    1     0  16         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+backward    0    0      0     0   0    0     0   0        20    0     0    0  ...      0      0       1    0     0   2       1    0    0     0      0       0
+bed         0    0      0     0   0    0     0   0         0   21     0    0  ...      0      0       0    1     0   0       0    0    1     0      0       0
+bird        0    0      0     0   0    0     0   0         0    1    22    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+cat         0    0      0     0   0    0     0   0         0    0     0   18  ...      0      1       0    3     0   0       0    0    1     0      1       0
+dog         0    0      0     0   0    0     0   1         0    0     0    0  ...      0      0       0    0     0   1       0    0    0     0      0       0
+down        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+eight       0    1      0     0   0    0     0   0         0    0     0    0  ...      0      2       0    0     0   0       0    0    0     1      0       0
+five        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       1    0     0   1       0    0    0     0      0       0
+forward     0    0      0     9   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+house       0    0      0     0   0    0     1   0         0    0     0    0  ...      0      0       0    0     0   3       0    0    0     0      0       0
+learn       2    0      0     0   0    0     0   0         0    0     0    0  ...      0      2       0    0     0   0       1    0    0     0      0       0
+left        0    0      0     0   0    0     0   0         0    1     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+marvin      1    0      0     0   0    0     0   0         0    1     0    0  ...      0      0       0    1     0   1       0    0    0     0      0       0
+nine        0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0       0
+no          0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   1       0    0    0     0      0       0
+right       0    0      1     0   0    0     0   0         0    0     0    0  ...     21      0       0    0     0   0       0    0    0     0      0       0
+seven       0    0      0     0   0    0     0   0         0    0     0    0  ...      0     25       0    0     0   0       0    0    0     0      0       0
+sheila      0    1      0     0   0    0     0   0         0    0     0    0  ...      0      1      21    0     0   0       0    0    0     1      0       0
+six         0    0      0     0   0    0     0   0         0    1     0    0  ...      0      0       1   23     0   0       0    0    0     0      0       0
+tree        0    0      8     0   0    0     0   0         0    0     0    1  ...      0      0       0    0    13   0       0    0    0     1      0       0
+up          0    0      0     0   0    0     0   0         0    0     0    0  ...      0      1       0    0     0  23       0    0    0     0      0       0
+visual      0    0      0     0   0    0     0   0         0    1     0    0  ...      0      0       0    0     0   0      21    0    0     3      0       0
+wow         0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0   24    0     0      0       0
+yes         0    0      0     0   0    0     0   0         0    0     1    0  ...      0      0       0    0     0   0       0    0   23     0      0       0
+zero        0    2      0     0   0    0     0   0         0    0     0    0  ...      0      0       1    0     0   1       3    0    0    18      0       0
+happy       0    0      0     0   0    0     0   0         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0     25       0
+follow      0    1      0     4   0    0     1   1         0    0     0    0  ...      0      0       0    0     0   0       0    0    0     0      0      17
+
+[35 rows x 35 columns]
