@@ -8,9 +8,9 @@ The aim of the tool was to provide pre-processing for raw audio input from a mic
 
 Post-Processing of information happens in `label_wav.py`. We take the prediction with the highest predicted probability, and return the prediction, score (predicted probability), and dictionary encoding of the highest predicted word in a tuple.
 
-Key actors here are `label_wav.py` and `SaveTheWav.py`. Running `SaveTheWav.py` starts inference, taking `ConvNet.pb` as a graph input and `conv_labels.txt` as desired labels for the output.
+Key actors here are `label_wav.py` and `debugSaveTheWav.py`. Running `debugSaveTheWav.py` starts inference, taking a `.pb` as a graph input and `conv_labels.txt` as desired labels for the output.
 
-Requirements are TensorFlow, Numpy, PyAudio. (just install the latest versions, as at 06/02/20. Particularly important is TF 2.0 because the backward compatibility is not great? I will fix this bc I just realised the RPi uses 1.15.)
+Requirements are TensorFlow, Numpy, PyAudio, sklearn. (just install the latest versions, as at 06/02/20. Particularly important is using TF=1.15.)
 
 ### SaveTheWav Model Zoo
 
@@ -19,7 +19,7 @@ python3 SaveTheWav.py
 ```
 <Models and Architectures from the speech recognition example. You can find more credits there. I do not claim credit for these architectures.>
 
-Mac OSX: Run on Mac OSX MacBook Air 2015.
+Mac OSX: Run on Mac OSX with Python3.
 RPi: Raspberry Pi 3.
 
 Two separate types of model being trained at the moment.
@@ -47,12 +47,6 @@ Your standard Convolutional Neural Network model.
 
 Runtime (Mac OSX): 0.1-0.2 seconds avg.
 
-#### Low Latency Conv (7 Classes) (LowLatencyConv_7Classes_110220.pb)
-
-Should run faster than ConvNet.
-
-Runtime (Mac OSX): 0.1-0.2 seconds.
-
 #### Low Latency SVDF (10 Classes) (LowLatencySVDF_10Classes_110220.pb)
 
 Should run faster than Low Latency Conv.
@@ -60,7 +54,17 @@ Should run faster than Low Latency Conv.
 Runtime (Mac OSX): 0.1-0.2 seconds.
 
 Observation:
-Runtime difference is negligible. Have to investigate further on the constrained computer (Raspberry Pi).
+Runtime difference is negligible, even on Raspberry Pi.
+
+#### ConvNet (36 Classes) (models/ConvNet_220220_37Classes.pb)
+
+### Testing
+
+Confusion matrix can be generated via running `access_files.py`. This will test the model against the test set, and generate validation / recall scores.
+store the final confusion matrix from testing.
+
+To get the accuracy of the model over time,
+`tensorboard --logdir logs/retrain_logs`
 
 ### Running Debug
 
@@ -85,8 +89,8 @@ Finding `input_array` and `output_array` is non trivial. Use `convert.py` while 
 
 Get `streaming_test.py` working.
 Argument Parser for `SaveTheWav.py` (including debug and verbose options)
-Conversion script for Tensorflow Lite.
-Changing of Sample Rates (16k microphone works for certain microphones, others take 44100 or others?)
+`requirements.txt`
+
 
 ### Reference
 
