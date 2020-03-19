@@ -1,0 +1,8 @@
+#ML
+tensorflow
+sklearn
+seaborn
+matplotlib
+numpy
+pandas
+pyaudio

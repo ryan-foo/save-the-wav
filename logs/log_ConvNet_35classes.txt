@@ -1,0 +1,26 @@
+\Validation Log 05/03, 13:33:09 with 23000 words AccurateConv 35 Classes model
+Confusion Matrix:
+ [[999   0   0 ...   0   0   0]
+ [  0   0   0 ...   0   0   0]
+ [351   0   0 ...   0   0   0]
+ ...
+ [384   0   0 ...   0   0   0]
+ [219   0   0 ...   0   0   0]
+ [132   0   0 ...   0   0   0]]Step 25000: Validation accuracy = 9.1% (N=10980)\Validation Log 05/03, 13:35:22 with 23000 words AccurateConv 35 Classes model
+Confusion Matrix:
+ [[999   0   0 ...   0   0   0]
+ [  0   0   0 ...   0   0   0]
+ [351   0   0 ...   0   0   0]
+ ...
+ [384   0   0 ...   0   0   0]
+ [219   0   0 ...   0   0   0]
+ [132   0   0 ...   0   0   0]]Step 25010: Validation accuracy = 9.1% (N=10980)
+Train Log 05/03, 13:37:17 with 23000 words AccurateConv 35 Classes model
+Confusion Matrix:
+ [[1101    0    0 ...    0    0    0]
+ [   0    0    0 ...    0    0    0]
+ [ 399    0    0 ...    0    0    0]
+ ...
+ [ 418    0    0 ...    0    0    0]
+ [ 203    0    0 ...    0    0    0]
+ [ 172    0    0 ...    0    0    0]]Final test accuracy = 9.1% (N=12106)
