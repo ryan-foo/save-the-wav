@@ -2,15 +2,23 @@
 
 I wrote a tool that takes a .wav input of 16000 samples, in 16000 chunks, uses a queue to store the audio data in `numpy.int16` format.
 
+You will have to install PortAudio on your system, and then 
+
+```
+pip3 install requirements.txt
+```
+
+I recommend you create a virtual environment before doing this, as per Python best practice.
+
 In the main loop, it writes to a `.wav` called `output.wav`, which is then passed to the model to run inference upon via calling the `label_wav` function in `label_wav.py`. This takes a 1 second, 16000 samples `.wav` input, converts it to a spectrogram, runs inference on the spectrogram, and returns a range of probabilities.
 
 The aim of the tool was to provide pre-processing for raw audio input from a microphone, store the data in a data buffer, before passing the data to the model.
 
 Post-Processing of information happens in `label_wav.py`. We take the prediction with the highest predicted probability, and return the prediction, score (predicted probability), and dictionary encoding of the highest predicted word in a tuple.
 
-Key actors here are `label_wav.py` and `debugSaveTheWav.py`. Running `debugSaveTheWav.py` starts inference, taking a `.pb` as a graph input and `conv_labels.txt` as desired labels for the output.
+Key actors here are `label_wav.py` and `debugSaveTheWav.py`. Running `debugSaveTheWav.py` starts inference, taking a `.pb` as a graph input and `conv_labels.txt` as desired labels.
 
-Requirements are TensorFlow, Numpy, PyAudio, sklearn. (just install the latest versions, as at 06/02/20. Particularly important is using TF=1.15.)
+At every time step, we output how long the prediction time takes to run, and how long a main loop takes to run. I am currently in the process of exploring more sophisticated post-processing steps in order to increase the robustness.
 
 ### SaveTheWav Model Zoo
 
