@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 pyaudio
 tensorflow==1.15
 numpy
 sklearn
+=======
+#ML
+tensorflow
+sklearn
+seaborn
+matplotlib
+numpy
+pandas
+pyaudio
+>>>>>>> 4e9f6bd9f61991446a03047cb51e5204c8931cf1

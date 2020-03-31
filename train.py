@@ -30,7 +30,7 @@ To run the training process, use:
 
 bazel run tensorflow/examples/speech_commands:train
 
-This will write out checkpoints to /tmp/speech_commands_train/, and will
+This will write out checkpoints to /speech_commands_train/, and will
 download over 1GB of open source training data, so you'll need enough free space
 and a good internet connection. The default data is a collection of thousands of
 one-second .wav files, each containing one spoken word. This data set is
@@ -361,7 +361,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--data_dir',
       type=str,
-      default='/tmp/speech_dataset/',
+      default='/speech_dataset/',
       help="""\
       Where to download the speech training data to.
       """)
@@ -459,7 +459,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--summaries_dir',
       type=str,
-      default='/tmp/retrain_logs',
+      default='/logs/retrain_logs',
       help='Where to save summary logs for TensorBoard.')
   parser.add_argument(
       '--wanted_words',
@@ -469,7 +469,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--train_dir',
       type=str,
-      default='/tmp/speech_commands_train',
+      default='/logs/speech_commands_train',
       help='Directory to write event logs and checkpoint.')
   parser.add_argument(
       '--save_step_interval',
