@@ -67,12 +67,12 @@ When running `python3 debugSaveTheWav.py`, it will write to `debug_log.txt` re: 
 
 Finding `input_array` and `output_array` is non trivial. Use `convert.py` while training to find the desired arrays. The current `input_name` is `wav_data`, `output_name` is `labels_softmax`, and you will need to specify the shape of `wav_data`. There are unsupported TensorFlow ops we attempt to convert.
 
-```converter = tf.lite.TFLiteConverter.from_frozen_graph(
+`converter = tf.lite.TFLiteConverter.from_frozen_graph(
     localpb, 
     ["wav_data"], 
     ['labels_softmax'],
     {"wav_data":[1,160,160,3]}
-)```
+)`
 
  Bypass and create a hybrid model with `converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS]`.
 
