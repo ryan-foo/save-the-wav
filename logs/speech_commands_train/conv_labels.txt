@@ -1,0 +1,10 @@
+_silence_
+_unknown_
+one
+two
+three
+four
+on
+off
+stop
+go
