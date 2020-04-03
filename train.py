@@ -316,6 +316,25 @@ def main(_):
   tf.compat.v1.logging.warn('Confusion Matrix:\n %s' % (total_conf_matrix))
   tf.compat.v1.logging.warn('Final test accuracy = %.1f%% (N=%d)' %
                             (total_accuracy * 100, set_size))
+  
+  # record = True
+  
+  # if record:
+  #   f = open("logs/log_ConvNet_35classes.txt","a+")
+  #   now = datetime.datetime.now()
+  #   current_time = str(now.strftime("%d/%m, %H:%M:%S"))
+  #   header = ('\nTrain Log ' + current_time + f" with 23000 words AccurateConv 35 Classes model" + '\n')
+
+  #   f.write(header)
+  #   f.write('Confusion Matrix:\n %s' % (total_conf_matrix))
+  #   f.write('Final test accuracy = %.1f%% (N=%d)' %
+  #                           (total_accuracy * 100, set_size))
+  #   f.close()
+
+  # tf.compat.v1.logging.warn('Confusion Matrix:\n %s' % (total_conf_matrix))
+  # tf.compat.v1.logging.warn('Final test accuracy = %.1f%% (N=%d)' %
+  #                           (total_accuracy * 100, set_size))
+
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
