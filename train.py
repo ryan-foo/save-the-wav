@@ -73,7 +73,6 @@ from __future__ import print_function
 import argparse
 import os.path
 import sys
-import datetime
 
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
@@ -281,21 +280,6 @@ def main(_):
           total_conf_matrix = conf_matrix
         else:
           total_conf_matrix += conf_matrix
-
-      record = True
-  
-      if record:
-        f = open("logs/log_ConvNet_35classes.txt","a+")
-        now = datetime.datetime.now()
-        current_time = str(now.strftime("%d/%m, %H:%M:%S"))
-        header = ('\Validation Log ' + current_time + f" with 23000 words AccurateConv 35 Classes model" + '\n')
-
-        f.write(header)
-        f.write('Confusion Matrix:\n %s' % (total_conf_matrix))
-        f.write('Step %d: Validation accuracy = %.1f%% (N=%d)' %
-                                (training_step, total_accuracy * 100, set_size))
-        f.close()
-
       tf.compat.v1.logging.info('Confusion Matrix:\n %s' % (total_conf_matrix))
       tf.compat.v1.logging.info('Step %d: Validation accuracy = %.1f%% (N=%d)' %
                                 (training_step, total_accuracy * 100, set_size))
@@ -329,24 +313,27 @@ def main(_):
       total_conf_matrix = conf_matrix
     else:
       total_conf_matrix += conf_matrix
-  
-  record = True
-  
-  if record:
-    f = open("logs/log_ConvNet_35classes.txt","a+")
-    now = datetime.datetime.now()
-    current_time = str(now.strftime("%d/%m, %H:%M:%S"))
-    header = ('\nTrain Log ' + current_time + f" with 23000 words AccurateConv 35 Classes model" + '\n')
-
-    f.write(header)
-    f.write('Confusion Matrix:\n %s' % (total_conf_matrix))
-    f.write('Final test accuracy = %.1f%% (N=%d)' %
-                            (total_accuracy * 100, set_size))
-    f.close()
-
   tf.compat.v1.logging.warn('Confusion Matrix:\n %s' % (total_conf_matrix))
   tf.compat.v1.logging.warn('Final test accuracy = %.1f%% (N=%d)' %
                             (total_accuracy * 100, set_size))
+  
+  # record = True
+  
+  # if record:
+  #   f = open("logs/log_ConvNet_35classes.txt","a+")
+  #   now = datetime.datetime.now()
+  #   current_time = str(now.strftime("%d/%m, %H:%M:%S"))
+  #   header = ('\nTrain Log ' + current_time + f" with 23000 words AccurateConv 35 Classes model" + '\n')
+
+  #   f.write(header)
+  #   f.write('Confusion Matrix:\n %s' % (total_conf_matrix))
+  #   f.write('Final test accuracy = %.1f%% (N=%d)' %
+  #                           (total_accuracy * 100, set_size))
+  #   f.close()
+
+  # tf.compat.v1.logging.warn('Confusion Matrix:\n %s' % (total_conf_matrix))
+  # tf.compat.v1.logging.warn('Final test accuracy = %.1f%% (N=%d)' %
+  #                           (total_accuracy * 100, set_size))
 
 
 if __name__ == '__main__':
@@ -361,7 +348,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--data_dir',
       type=str,
-      default='/speech_dataset/',
+      default='/tmp/speech_dataset/',
       help="""\
       Where to download the speech training data to.
       """)
@@ -439,7 +426,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--how_many_training_steps',
       type=str,
-      default='20000,3010',
+      default='20000,4010',
       help='How many training loops to run',)
   parser.add_argument(
       '--eval_step_interval',
@@ -459,17 +446,17 @@ if __name__ == '__main__':
   parser.add_argument(
       '--summaries_dir',
       type=str,
-      default='/logs/retrain_logs',
+      default='/tmp/speech_commands_train/retrain_logs',
       help='Where to save summary logs for TensorBoard.')
   parser.add_argument(
       '--wanted_words',
       type=str,
-      default='one,two,three,four,on,off,stop,go,backward,bed,bird,cat,dog,down,eight,five,forward,house,learn,left,marvin,nine,no,right,seven,sheila,six,tree,up,visual,wow,yes,zero,happy,follow',
+      default='one,two,three,four,on,off,stop,go',
       help='Words to use (others will be added to an unknown label)',)
   parser.add_argument(
       '--train_dir',
       type=str,
-      default='/logs/speech_commands_train',
+      default='/tmp/speech_commands_train',
       help='Directory to write event logs and checkpoint.')
   parser.add_argument(
       '--save_step_interval',

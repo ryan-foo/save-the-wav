@@ -1,8 +1,10 @@
-#ML
-tensorflow
+
+pyaudio
+tensorflow==1.15
+numpy
 sklearn
+
 seaborn
 matplotlib
-numpy
 pandas
-pyaudio
+

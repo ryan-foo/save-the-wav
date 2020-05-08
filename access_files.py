@@ -219,8 +219,10 @@ if sea_born:
         dimensions = class_names
     cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     fig, ax = plt.subplots(figsize=(10, 10))
+    colors = ["orange", "green"]
     sn.heatmap(cmn, annot=True, fmt='.2f',
-    	           xticklabels=dimensions, yticklabels=dimensions)
+    	           xticklabels=dimensions, cmap=colors, yticklabels=dimensions)
+    plt.title("Confusion Matrix")
     plt.ylabel('Actual')
     plt.xlabel('Predicted')
     plt.show(block=False)
